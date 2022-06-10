@@ -78,6 +78,7 @@ public class TransactionTransmitter extends ForwardedMessageResponder {
     final String signedTransactionHexString;
     try {
       signedTransactionHexString = transactionSerializer.serialize(transaction);
+      LOG.info("RawTransaction {}", signedTransactionHexString);
     } catch (final IllegalArgumentException e) {
       LOG.debug("Failed to encode transaction: {}", transaction, e);
       final JsonRpcException jsonRpcException = new JsonRpcException(JsonRpcError.INVALID_PARAMS);

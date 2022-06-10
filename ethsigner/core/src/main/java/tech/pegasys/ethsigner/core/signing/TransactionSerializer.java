@@ -16,12 +16,15 @@ import tech.pegasys.ethsigner.core.requesthandler.sendtransaction.transaction.Tr
 import tech.pegasys.signers.secp256k1.api.Signature;
 import tech.pegasys.signers.secp256k1.api.Signer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.Sign.SignatureData;
-import org.web3j.crypto.TransactionEncoder;
 import org.web3j.utils.Numeric;
 
 public class TransactionSerializer {
+
+  private static final Logger LOG = LogManager.getLogger();
 
   protected final Signer signer;
   protected final long chainId;
@@ -33,6 +36,7 @@ public class TransactionSerializer {
 
   public String serialize(final Transaction transaction) {
     final byte[] bytesToSign = transaction.rlpEncode(chainId);
+    LOG.info("BytesToSign {}", Numeric.toHexString(bytesToSign));
 
     final Signature signature = signer.sign(bytesToSign);
 
@@ -42,10 +46,11 @@ public class TransactionSerializer {
             signature.getR().toByteArray(),
             signature.getS().toByteArray());
 
-    final SignatureData eip155Signature =
-        TransactionEncoder.createEip155SignatureData(web3jSignature, chainId);
+    // final SignatureData eip155Signature =
+    //    TransactionEncoder.createEip155SignatureData(web3jSignature, chainId);
 
-    final byte[] serializedBytes = transaction.rlpEncode(eip155Signature);
+    // final byte[] serializedBytes = transaction.rlpEncode(eip155Signature);
+    final byte[] serializedBytes = transaction.rlpEncode(web3jSignature);
     return Numeric.toHexString(serializedBytes);
   }
 

@@ -44,6 +44,7 @@ public class SendTransactionHandler implements JsonRpcRequestHandler {
   private final Eth1AddressSignerProvider signerProvider;
   private final TransactionFactory transactionFactory;
   private final VertxRequestTransmitterFactory vertxTransmitterFactory;
+  private final String nodeAddress;
 
   private static final int MAX_NONCE_RETRIES = 10;
 
@@ -51,11 +52,13 @@ public class SendTransactionHandler implements JsonRpcRequestHandler {
       final long chainId,
       final Eth1AddressSignerProvider signerProvider,
       final TransactionFactory transactionFactory,
-      final VertxRequestTransmitterFactory vertxTransmitterFactory) {
+      final VertxRequestTransmitterFactory vertxTransmitterFactory,
+      final String nodeAddress) {
     this.chainId = chainId;
     this.signerProvider = signerProvider;
     this.transactionFactory = transactionFactory;
     this.vertxTransmitterFactory = vertxTransmitterFactory;
+    this.nodeAddress = nodeAddress;
   }
 
   @Override
@@ -63,7 +66,7 @@ public class SendTransactionHandler implements JsonRpcRequestHandler {
     LOG.debug("Transforming request {}, {}", request.getId(), request.getMethod());
     final Transaction transaction;
     try {
-      transaction = transactionFactory.createTransaction(context, request);
+      transaction = transactionFactory.createTransaction(context, request, nodeAddress);
     } catch (final NumberFormatException e) {
       LOG.debug("Parsing values failed for request: {}", request.getParams(), e);
       final JsonRpcException jsonRpcException = new JsonRpcException(INVALID_PARAMS);

@@ -96,7 +96,8 @@ public final class EthSigner {
               config.getDataPath(),
               vertx,
               config.getCorsAllowedOrigins(),
-              metricsEndpoint);
+              metricsEndpoint,
+              config.getNodeAddress());
 
       runner.start();
     } catch (final Throwable t) {

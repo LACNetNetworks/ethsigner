@@ -55,6 +55,7 @@ public enum JsonRpcError {
   GAS_PRICE_TOO_LOW(-32009, "Gas price below configured minimum gas price"),
   WRONG_CHAIN_ID(-32000, "Wrong chainId"),
   REPLAY_PROTECTED_SIGNATURES_NOT_SUPPORTED(-32000, "ChainId not supported"),
+  WRONG_NODE_ADDRESS(-32000, "Wrong node Address"),
 
   // Miner failures
   COINBASE_NOT_SET(-32010, "Coinbase not set. Unable to start mining without a coinbase"),

@@ -219,6 +219,13 @@ public class EthSignerBaseCommand implements Config, Runnable {
       defaultValue = "localhost,127.0.0.1")
   private final AllowListHostsProperty metricsHostAllowList = new AllowListHostsProperty();
 
+  @RequiredOption
+  @Option(
+      names = {"--node-address"},
+      description = "The node address that will send signed transactions",
+      defaultValue = "0xd00456754")
+  private String nodeAddress;
+
   @Override
   public Level getLogLevel() {
     return logLevel;
@@ -252,6 +259,11 @@ public class EthSignerBaseCommand implements Config, Runnable {
   @Override
   public ChainIdProvider getChainId() {
     return new ConfigurationChainId(chainId);
+  }
+
+  @Override
+  public String getNodeAddress() {
+    return nodeAddress;
   }
 
   @Override
@@ -329,6 +341,7 @@ public class EthSignerBaseCommand implements Config, Runnable {
         .add("dataPath", dataPath)
         .add("clientTlsOptions", clientTlsOptions)
         .add("corsAllowedOrigins", rpcHttpCorsAllowedOrigins)
+        .add("nodeAddress", nodeAddress)
         .toString();
   }
 

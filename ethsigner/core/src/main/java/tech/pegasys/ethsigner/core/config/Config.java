@@ -60,4 +60,6 @@ public interface Config {
   Set<MetricCategory> getMetricCategories();
 
   List<String> getMetricsHostAllowList();
+
+  String getNodeAddress();
 }

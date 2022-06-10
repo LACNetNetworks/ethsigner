@@ -77,6 +77,7 @@ public class Runner {
   private final Collection<String> allowedCorsOrigins;
   private final HttpServerOptions serverOptions;
   private final MetricsEndpoint metricsEndpoint;
+  private final String nodeAddress;
 
   public Runner(
       final long chainId,
@@ -89,7 +90,8 @@ public class Runner {
       final Path dataPath,
       final Vertx vertx,
       final Collection<String> allowedCorsOrigins,
-      final MetricsEndpoint metricsEndpoint) {
+      final MetricsEndpoint metricsEndpoint,
+      final String nodeAddress) {
     this.chainId = chainId;
     this.signerProvider = signerProvider;
     this.clientOptions = clientOptions;
@@ -101,6 +103,7 @@ public class Runner {
     this.allowedCorsOrigins = allowedCorsOrigins;
     this.serverOptions = serverOptions;
     this.metricsEndpoint = metricsEndpoint;
+    this.nodeAddress = nodeAddress;
   }
 
   public void start() throws ExecutionException, InterruptedException {
@@ -162,7 +165,8 @@ public class Runner {
         new TransactionFactory(jsonDecoder, transmitterFactory);
 
     final SendTransactionHandler sendTransactionHandler =
-        new SendTransactionHandler(chainId, signerProvider, transactionFactory, transmitterFactory);
+        new SendTransactionHandler(
+            chainId, signerProvider, transactionFactory, transmitterFactory, nodeAddress);
 
     final RequestMapper requestMapper = new RequestMapper(defaultHandler);
     requestMapper.addHandler("eth_sendTransaction", sendTransactionHandler);

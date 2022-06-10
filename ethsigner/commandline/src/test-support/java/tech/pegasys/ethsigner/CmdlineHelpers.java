@@ -46,6 +46,7 @@ public class CmdlineHelpers {
     optionsMap.put("downstream-http-tls-keystore-password-file", "./test.pass");
     optionsMap.put("downstream-http-tls-ca-auth-enabled", Boolean.FALSE);
     optionsMap.put("downstream-http-tls-known-servers-file", "./test.txt");
+    optionsMap.put("node-address", "0xd00ff");
 
     return optionsMap;
   }

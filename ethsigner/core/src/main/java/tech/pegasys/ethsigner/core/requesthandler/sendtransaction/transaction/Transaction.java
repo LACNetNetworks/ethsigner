@@ -37,6 +37,7 @@ public interface Transaction {
 
   default byte[] rlpEncode(final long chainId) {
     final SignatureData signatureData =
+        //    new SignatureData(new byte[] {}, new byte[] {}, new byte[] {});
         new SignatureData(longToBytes(chainId), new byte[] {}, new byte[] {});
     return rlpEncode(signatureData);
   }

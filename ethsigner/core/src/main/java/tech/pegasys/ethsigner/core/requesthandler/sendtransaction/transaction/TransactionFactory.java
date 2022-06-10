@@ -39,7 +39,8 @@ public class TransactionFactory {
     this.decoder = decoder;
   }
 
-  public Transaction createTransaction(final RoutingContext context, final JsonRpcRequest request) {
+  public Transaction createTransaction(
+      final RoutingContext context, final JsonRpcRequest request, final String nodeAddress) {
     final String method = request.getMethod().toLowerCase();
     final VertxNonceRequestTransmitter nonceRequestTransmitter =
         new VertxNonceRequestTransmitter(context.request().headers(), decoder, transmitterFactory);
@@ -49,7 +50,8 @@ public class TransactionFactory {
 
     switch (method) {
       case "eth_sendtransaction":
-        return createEthTransaction(request, nonceRequestTransmitter, storeRawRequestTransmitter);
+        return createEthTransaction(
+            request, nonceRequestTransmitter, storeRawRequestTransmitter, nodeAddress);
       case "eea_sendtransaction":
         return createEeaTransaction(request, nonceRequestTransmitter);
       default:
@@ -60,7 +62,8 @@ public class TransactionFactory {
   private Transaction createEthTransaction(
       final JsonRpcRequest request,
       final VertxNonceRequestTransmitter nonceRequestTransmitter,
-      final VertxStoreRawRequestTransmitter storeRawRequestTransmitter) {
+      final VertxStoreRawRequestTransmitter storeRawRequestTransmitter,
+      final String nodeAddress) {
     final EthSendTransactionJsonParameters params =
         fromRpcRequestToJsonParam(EthSendTransactionJsonParameters.class, request);
 
@@ -73,7 +76,7 @@ public class TransactionFactory {
       return GoQuorumPrivateTransaction.from(
           params, ethNonceProvider, lookupIdProvider, request.getId());
     } else {
-      return new EthTransaction(params, ethNonceProvider, request.getId());
+      return new EthTransaction(params, ethNonceProvider, request.getId(), nodeAddress);
     }
   }
 
