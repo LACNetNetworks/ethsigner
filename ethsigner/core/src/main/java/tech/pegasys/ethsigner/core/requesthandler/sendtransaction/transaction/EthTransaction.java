@@ -20,8 +20,6 @@ import tech.pegasys.ethsigner.core.requesthandler.sendtransaction.NonceProvider;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.google.common.base.MoreObjects;
 import org.apache.logging.log4j.LogManager;
@@ -96,7 +94,8 @@ public class EthTransaction implements Transaction {
     LOG.info("chainId {}", Numeric.toHexString(signatureData.getV()));
     if ("0x000000000009E55D".equalsIgnoreCase(Numeric.toHexString(signatureData.getV()))
         || "0x000000000009E551".equalsIgnoreCase(Numeric.toHexString(signatureData.getV()))
-        || "0x000000000009E552".equalsIgnoreCase(Numeric.toHexString(signatureData.getV()))) {
+        || "0x000000000009E552".equalsIgnoreCase(Numeric.toHexString(signatureData.getV()))
+        || "0x000000000009E554".equalsIgnoreCase(Numeric.toHexString(signatureData.getV()))) {
       return TransactionEncoder.encode(rawTransaction);
     }
     final List<RlpType> values = TransactionEncoder.asRlpValues(rawTransaction, signatureData);
@@ -153,7 +152,9 @@ public class EthTransaction implements Transaction {
     LOG.info("expiration {}", expiration.getValue().toString());
     String expirationAbi = TypeEncoder.encode(expiration);
     String lacchainParameters = nodeAddressAbi.concat(expirationAbi);
-    Optional<String> opt = Optional.of(lacchainParameters);
-    return Stream.concat(data.stream(), opt.stream()).collect(Collectors.joining(" AND "));
+    // Optional<String> opt = Optional.of(lacchainParameters);
+    // Optional<String> newData = Stream.concat(data.stream(),
+    // opt.stream()).collect(Collectors.joining(" AND "));
+    return data.get().concat(lacchainParameters);
   }
 }
